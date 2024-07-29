@@ -124,6 +124,19 @@ ssize_t Buffer::ReadFd(int fd,int* Errno)
     // 分散读，保证数据全部读完
     iov[0].iov_base = BeginWrite();
     iov[0].iov_len = writeable;
+    iov[1].iov_base = buff;
+    iov[1].iov_len = sizeof(buff);
+
+    ssize_t len = readv(fd, iov, 2);
+    if(len < 0) {
+        *Errno = errno;
+    } else if(static_cast<size_t>(len) <= writeable) {   // 若len小于writable，说明写区可以容纳len
+        writePos_ += len;   // 直接移动写下标
+    } else {    
+        writePos_ = buffer_.size(); // 写区写满了,下标移到最后
+        Append(buff, static_cast<size_t>(len - writeable)); // 剩余的长度
+    }
+    return len;
 }
 
 // 将buffer中可读的区域写入fd中

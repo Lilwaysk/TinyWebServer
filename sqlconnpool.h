@@ -9,10 +9,7 @@
 #include <thread>
 #include "log.h"
 
-using namespace std;
-
-class SqlConnPool
-{
+class SqlConnPool {
 public:
     static SqlConnPool *Instance();
 
@@ -21,7 +18,7 @@ public:
     int GetFreeConnCount();
 
     void Init(const char* host, int port,
-              const char* user, const char* pwd,
+              const char* user,const char* pwd, 
               const char* dbName, int connSize);
     void ClosePool();
 
@@ -31,10 +28,28 @@ private:
 
     int MAX_CONN_;
 
-    queue<MYSQL *> connQue_;
-    mutex mtx_;
+    std::queue<MYSQL *> connQue_;
+    std::mutex mtx_;
     sem_t semId_;
 };
 
+/* 资源在对象构造初始化 资源在对象析构时释放*/
+class SqlConnRAII {
+public:
+    SqlConnRAII(MYSQL** sql, SqlConnPool *connpool) {
+        assert(connpool);
+        *sql = connpool->GetConn();
+        sql_ = *sql;
+        connpool_ = connpool;
+    }
+    
+    ~SqlConnRAII() {
+        if(sql_) { connpool_->FreeConn(sql_); }
+    }
+    
+private:
+    MYSQL *sql_;
+    SqlConnPool* connpool_;
+};
 
-#endif
+#endif // SQLCONNPOOL_H
