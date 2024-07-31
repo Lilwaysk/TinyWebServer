@@ -31,12 +31,12 @@ public:
     void Init();
     bool parse(Buffer& buff);
 
-    string& path() const;
+    string path() const;
     string& path();
     string method() const;
     string version() const;
     string GetPost(const string& key) const;
-    string GetPost(const Char* key) const;
+    string GetPost(const char* key) const;
 
     bool IsKeepAlive() const;
 

@@ -83,7 +83,7 @@ void HttpRequest::ParsePath_()
     
 }
 
-bool HttpRequest::ParseRequestLine_(sonct string& line)
+bool HttpRequest::ParseRequestLine_(const string& line)
 {
     regex patten("^([^ ]*) ([^ ]*) HTTP/([^ ]*)$");
     smatch subMatch;
@@ -195,7 +195,7 @@ bool HttpRequest::UserVerity(const string& name, const string& pwd, bool isLogin
     SqlConnRAII(&sql, SqlConnPool::Instance());
     assert(sql);
 
-    bool flag - false;
+    bool flag = false;
     unsigned int j = 0;
     char order[256] = {0};
     MYSQL_FIELD* fields = nullptr;
@@ -261,7 +261,7 @@ string HttpRequest::path() const
     return path_;
 }
 
-string HttpRequest::path()
+string& HttpRequest::path()
 {
     return path_;
 }
@@ -271,7 +271,7 @@ string HttpRequest::method() const
     return method_;
 }
 
-string HttpRequest::version
+string HttpRequest::version() const
 {
     return version_;
 }
