@@ -54,5 +54,38 @@ HttpResponse::~HttpResponse()
 
 void HttpResponse::Init(const string& srcDir, string& path, bool isKeepAlive, int code)
 {
+    assert(srcDir != "");
+    if(mmFile_) { UnmapFile(); }
+    code_ = code;
+    isKeepAlive_ = isKeepAlive;
+    path_ = path;
+    srcDir_ = srcDir;
+    mmFile_ = nullptr;
+    mmFileStat_ = {0};
+}
+
+void HttpResponse::MakeResponse(Buffer& buff)
+{
+    // 判断请求的资源文件
+    if(stat((srcDir_ + path_).data(), &mmFileStat_) < 0 || S_ISDIR(mmFileStat_.st_mode))
+        code_ = 404;
+    else if(!(mmFileStat_.st_mode & S_IROTH))
+        code_ = 403;
+    else if(code_ == -1)
+        code_ = 200;
     
+    ErrorHtml_();
+    AddStateLine_(buff);
+    AddHeader_(buff);
+    AddContent_(buff);
+}
+
+char* HttpResponse::File()
+{
+    return mmFile_;
+}
+
+size_t HttpResponse::FileLen() const
+{
+    return mmFileStat_.st_size;
 }

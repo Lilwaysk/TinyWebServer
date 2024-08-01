@@ -17,13 +17,13 @@ public:
     ~HttpResponse();
 
     void Init(const string& srcDir_, string& path_, bool isKeepAlive_ = false, int code = -1);
-    void NakeResponse(Buffer& buff);
+    void MakeResponse(Buffer& buff);
     void UnmapFile();
     char* File();
     size_t FileLen() const;
     void ErrorContent(Buffer& buff, string message);
     int Code() const { return code_; }
-    
+
 private:
     void AddStateLine_(Buffer &buff);
     void AddHeader_(Buffer &buff);
