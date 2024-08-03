@@ -2,7 +2,14 @@
     "files.associations": {
         "cerrno": "cpp",
         "chrono": "cpp",
-        "condition_variable": "cpp"
+        "condition_variable": "cpp",
+        "array": "cpp",
+        "bitset": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "regex": "cpp",
+        "utility": "cpp",
+        "vector": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
