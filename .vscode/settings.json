@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "cerrno": "cpp"
-    }
+        "cerrno": "cpp",
+        "chrono": "cpp",
+        "condition_variable": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }
